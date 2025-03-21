@@ -6,6 +6,7 @@
 
 #include "hello_imgui/dpi_aware.h"
 #include "hello_imgui/hello_imgui.h"
+#include "image_compare.h"
 #include "imcmd_command_palette.h"
 #include "imgui_internal.h"
 #include "implot.h"
@@ -245,6 +246,19 @@ HDRViewApp::HDRViewApp(std::optional<float> force_exposure, std::optional<float>
             return img->draw_info();
     };
 
+    HelloImGui::DockableWindow metric_window;
+    metric_window.label             = "Metrics";
+    metric_window.dockSpaceName     = "RightSpace";
+    metric_window.isVisible         = true;
+    metric_window.rememberIsVisible = true;
+    metric_window.GuiFunction       = [this]
+    {
+        ConstImagePtr currentImg   = current_image();
+        ConstImagePtr referenceImg = reference_image();
+        if (currentImg && referenceImg)
+            return draw_metric(referenceImg, currentImg);
+    };
+
     HelloImGui::DockableWindow pixel_inspector_window;
     pixel_inspector_window.label             = "Pixel inspector";
     pixel_inspector_window.dockSpaceName     = "RightBottomSpace";
@@ -294,9 +308,9 @@ HDRViewApp::HDRViewApp(std::optional<float> force_exposure, std::optional<float>
 
     // docking layouts
     m_params.dockingParams.layoutName      = "Standard";
-    m_params.dockingParams.dockableWindows = {histogram_window, channel_stats_window,    file_window,
-                                              info_window,      pixel_inspector_window,  channel_window,
-                                              log_window,       advanced_settings_window};
+    m_params.dockingParams.dockableWindows = {histogram_window, channel_stats_window, file_window,
+                                              info_window,      metric_window,        pixel_inspector_window,
+                                              channel_window,   log_window,           advanced_settings_window};
     m_params.dockingParams.dockingSplits   = {
         HelloImGui::DockingSplit{"MainDockSpace", "HistogramSpace", ImGuiDir_Left, 0.2f},
         HelloImGui::DockingSplit{"HistogramSpace", "ImagesSpace", ImGuiDir_Down, 0.75f},
@@ -1722,6 +1736,14 @@ void HDRViewApp::draw_info_window()
 {
     if (auto img = current_image())
         return img->draw_info();
+}
+
+void HDRViewApp::draw_metric_window()
+{
+    ConstImagePtr currentImg   = current_image();
+    ConstImagePtr referenceImg = reference_image();
+    if (currentImg && referenceImg)
+        return draw_metric(referenceImg, currentImg);
 }
 
 float4 HDRViewApp::pixel_value(int2 p, bool raw, int which_image) const

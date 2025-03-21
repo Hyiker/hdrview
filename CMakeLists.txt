@@ -593,6 +593,7 @@ hello_imgui_add_app(
   src/emscripten_utils.cpp
   src/fonts.cpp
   src/hdrview.cpp
+  src/image_compare.cpp
   src/image.cpp
   src/imageio.cpp
   src/imgui_ext.cpp
