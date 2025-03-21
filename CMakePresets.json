@@ -1,0 +1,44 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+      "major": 3,
+      "minor": 15,
+      "patch": 0
+  },
+  "configurePresets": [
+      {
+          "name": "base",
+          "description": "Base configuration inherited by all presets.",
+          "hidden": true,
+          "cacheVariables": {},
+          "binaryDir": "${sourceDir}/build/${presetName}"
+      },
+      {
+          "name": "emscripten",
+          "inherits": [
+              "base"
+          ],
+          "displayName": "Emscripten",
+          "description": "Emscripten toolchain.",
+          "toolchainFile": "$env{EMSCRIPTEN}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+          "generator": "Ninja Multi-Config",
+          "cacheVariables": {
+              "CMAKE_MAKE_PROGRAM": "ninja"
+          }
+      }
+  ],
+  "buildPresets": [
+      {
+          "name": "emscripten-debug",
+          "displayName": "Debug",
+          "configurePreset": "emscripten",
+          "configuration": "Debug"
+      },
+      {
+          "name": "emscripten-release",
+          "displayName": "Release",
+          "configurePreset": "emscripten",
+          "configuration": "Release"
+      }
+  ]
+}

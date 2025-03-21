@@ -95,6 +95,11 @@ extern "C"
         }
     }
 
+    EMSCRIPTEN_KEEPALIVE void hdrview_loadurl(const char *url)
+    {
+        hdrview()->load_url(url);
+    }
+
 } // extern "C"
 
 #endif

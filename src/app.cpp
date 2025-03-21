@@ -490,7 +490,7 @@ HDRViewApp::HDRViewApp(std::optional<float> force_exposure, std::optional<float>
     {
         add_pending_images();
 
-        draw_about_dialog();
+        // draw_about_dialog();
 
         draw_command_palette();
 

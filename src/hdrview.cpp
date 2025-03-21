@@ -130,6 +130,7 @@ The default is 2 (info).)")
             ->option_text("PATH(existing) ...");
 #if defined(__EMSCRIPTEN__)
         app.add_option("--url", url, "URL of an image to download and open");
+        app.allow_extras();
 #endif
 
         // enable all log messages globally, and for the default logger
